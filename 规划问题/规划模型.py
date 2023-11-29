@@ -1,176 +1,80 @@
 import pandas as pd
-import csv
 import numpy as np
-df=pd.read_csv("../C题处理后的中间文件2.csv")
-height,weight=df.shape
-# Replace '回归预测比特币.xls' with the path to your Excel file
-file_path = '../回归预测比特币.xls'
 
-# Read the Excel file into a DataFrame
-df = pd.read_excel(file_path)
+# Function to read Excel file and return reshaped DataFrame
+def read_and_reshape_excel(file_path, column_index):
+    df = pd.read_excel(file_path)
+    df_array = np.array(df.values)
+    df_column = np.array(df_array[:, column_index]).reshape(-1, 1)
+    return df_column
 
-# Convert the DataFrame values to a NumPy array
-df_array = np.array(df.values)
+# Read Bitcoin data
+bitcoin_file_path = '../回归预测比特币.xls'
+bitcoin_prices = read_and_reshape_excel(bitcoin_file_path, 1)
+print(bitcoin_prices)
+# Read Gold data
+gold_file_path = '../回归预测黄金.xls'
+gold_prices = read_and_reshape_excel(gold_file_path, 3)
+print(gold_prices)
 
-# Access the second column (column index 1) in the NumPy array
-df1 = np.array(df_array[:, 1])
-print(df1)
-df4=[]
-print(df1.shape[0])
-for i in range(1,df1.shape[0]):
-    tmp=[]
-    print(type(df1[i][0]))
-    tmp.append(df1[i][0])
-    df4.append(tmp)
-df4=np.array(df4)
-df1=df4
-df2=pd.read_excel("黄金的预测价格.xls")
-df2=np.array(df2.values)
-df3=[]
-df3.append([1324.6])
-for i in range(0,df2.shape[0]):
-    df3.append(df2[i])
-df3=np.array(df3)
-m=df.values
-huangjin=[]
-for i in range(0,height):
-    if(m[i][2]==0):
-        huangjin.append(m[i][3])
-k=1 #k代表现在持有的是黄金还是比特币
-n=0 #黄金统计
-rateG=0.01
-rateB=0.02
-oldprice_G=0
-oldprice_B=0
-newprice_G=0
-newprice_B=0
-target=1000
-res=[]
-height=height-1
-for i in range(1,height-1):
-    res1=[]
-    print("第%d天的资产为：%f"%(i,target))
-    res1.append(target)
+# Initialize variables
+k = 1  # k represents whether the current holding is gold or bitcoin
+target = 1000
+res = []
+
+# Iterate through the data
+for i in range(1, len(bitcoin_prices) - 1):
+    res1 = [target]
     res.append(res1)
-    #如果黄金不能交易
-    if(m[i][2]==1):
-        #持现
-        if(k==0):
-            oldprice_B=df1[i-1][0]
-            newprice_B=df1[i][0]
-            tmp=target /(1+rateB) * newprice_B / oldprice_B
-            tmp=round(tmp,2)
-            target1=max(target,tmp)
-            if(target1==target):
-                target1=target
-                k1=0
-            else:
-                target1=round(target /(1+rateB) * m[i+1][1]/ m[i][1],2)
-                k1=1
-        #持比特币
-        if(k==1):
-            oldprice_B = df1[i-1][0]
-            newprice_B = df1[i][0]
-            tmp1=target*(newprice_B/oldprice_B)
-            tmp1=round(tmp1,2)
-            tmp2=target/(1+rateB)
-            tmp2=round(tmp2,2)
-            target1=max(tmp1,tmp2)
-            if(target1==tmp2):
-                k1=0
-                target1 = round(target / (1 + rateB), 2)
-            else:
-                target1=round(target*(m[i+1][1]/m[i][1]),2)
-                k1=1
-        #持黄金
-        if(k==2):
-            target1=target
-            k1=2
-        k=k1
-        target=target1
-    if(m[i][2]==0):
-        oldprice_B1 = m[i][1]
-        newprice_B1 = m[i + 1][1]
-        oldprice_G1=huangjin[n]
-        newprice_G1=huangjin[n+1]
+    print(f"第{i}天的资产为：{target}")
 
-        oldprice_B = df1[i-1][0]
-        newprice_B = df1[i][0]
-        oldprice_G=df3[n][0]
-        newprice_G=df3[n+1][0]
-        if(k==0):
-            tmp1=target/(1+rateG)*newprice_G/oldprice_G
-            tmp1=round(tmp1,2)
-            tmp2=target/(1+rateB)*newprice_B/oldprice_B
-            tmp2=round(tmp2,2)
-            target1=max(tmp1,tmp2,target)
-            if(target1==target):
-                target1=target
-                k1=0
-            else:
-                if(target1==tmp1):
-                    target1=round(target/(1+rateG)*newprice_G1/oldprice_G1,2)
-                    k1=2
-                else:
-                    target1=round(target/(1+rateB)*newprice_B1/oldprice_B1,2)
-                    k1=1
-        if(k==1):
-            tmp1=target*newprice_B/oldprice_B
-            # print(tmp1)
-            tmp1=round(tmp1,2)
-            tmp2=target/(1+rateB)
-            tmp2=round(tmp2,2)
-            tmp3=target/(1+rateB+rateG)*newprice_G/oldprice_G
-            # print(tmp3)
-            tmp3=round(tmp3,2)
-            target1=max(tmp1,tmp2,tmp3)
-            if(target1==tmp1):
-                target1=target*newprice_B1/oldprice_B1
-                k1=1
-            else:
-                if(target1==tmp2):
-                    target1=round(target / (1 + rateB),2)
-                    k1=0
-                else:
-                    k1=2
-                    target1=round(target/(1+rateB+rateG)*newprice_G1/oldprice_G1,2)
-        if(k==2):
-            tmp1 = target * newprice_G / oldprice_G
-            tmp1=round(tmp1, 2)
-            tmp2 = target /(1+rateG)
-            tmp2 = round(tmp2, 2)
-            tmp3 = target /(1+rateB+rateG) * newprice_B / oldprice_B
-            tmp3 = round(tmp3, 3)
-            target1 = max(tmp1, tmp2, tmp3)
-            if (target1 == tmp1):
-                target1=round(target * newprice_G1 / oldprice_G1,2)
-                k1 = 2
-            else:
-                if (target1 == tmp2):
-                    k1 = 0
-                    target1=round(target /(1+rateG),2)
-                else:
-                    k1 = 1
-                    target1=round(target /(1+rateB+rateG) * newprice_B1 / oldprice_B1,2)
-        n=n+1
-        k=k1
-        target=target1
+    if bitcoin_prices[i][0] == 1:  # If gold cannot be traded
+        old_price = bitcoin_prices[i - 1][0]
+        new_price = bitcoin_prices[i][0]
 
-tmp=[]
-tmp.append(target)
-res.append(tmp)
-res=np.array(res)
-# print(res.shape[0])
-print("第%d天的资产为：%f"%(height-1,target))
-# f=open('最终版初始资金为500的资金变化.csv','w',encoding='utf-8',newline="")
-# csv_writer = csv.writer(f)
-# csv_writer.writerow(["资金（少一天）"])
-# csv_writer.writerow([500])
-# for i in range(0,1824):
-#     csv_writer.writerow(res[i])
-# f.close()
+        if k == 0:  # Holding cash
+            target = max(target, round(target / (1 + 0.02) * new_price / old_price, 2))
+        elif k == 1:  # Holding bitcoin
+            target = max(target * (new_price / old_price), round(target / (1 + 0.02), 2))
+        elif k == 2:  # Holding gold
+            target = target
 
+    if bitcoin_prices[i][0] == 0:  # If gold can be traded
+        old_price_btc = bitcoin_prices[i - 1][0]
+        new_price_btc = bitcoin_prices[i][0]
+        old_price_gold = gold_prices[i - 1][0]
+        new_price_gold = gold_prices[i][0]
 
+        if k == 0:  # Holding cash
+            target = max(
+                round(target / (1 + 0.01) * new_price_gold / old_price_gold, 2),
+                round(target / (1 + 0.02) * new_price_btc / old_price_btc, 2),
+                target
+            )
+        elif k == 1:  # Holding bitcoin
+            target = max(
+                target * (new_price_btc / old_price_btc),
+                round(target / (1 + 0.02), 2),
+                round(target / (1 + 0.01 + 0.02) * new_price_gold / old_price_gold, 2)
+            )
+        elif k == 2:  # Holding gold
+            target = max(
+                target * (new_price_gold / old_price_gold),
+                round(target / (1 + 0.01), 2),
+                round(target / (1 + 0.01 + 0.02) * new_price_btc / old_price_btc, 2)
+            )
 
+    k = 2 if bitcoin_prices[i][0] == 0 else k
 
+# Final day
+res.append([target])
 
+# Convert the result to a NumPy array
+res = np.array(res)
+
+# Display the final result
+print(f"第{len(bitcoin_prices) - 1}天的资产为：{target}")
+
+# Optionally, write the result to a CSV file
+# res_df = pd.DataFrame(res, columns=["资金（少一天）"])
+# res_df.to_csv('最终版初始资金为500的资金变化.csv', encoding='utf-8', index=False)
