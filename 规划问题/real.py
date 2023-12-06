@@ -29,7 +29,7 @@ oldprice_G = 0
 oldprice_B = 0
 newprice_G = 0
 newprice_B = 0
-target = 1000  # 初始资产
+target = 2000  # 初始资产
 
 res = []  # 存储每天的操作
 
@@ -39,6 +39,11 @@ for i in range(1, height - 1):
 
     # 打印当前天的资产
     print("第%d天的资产为：%f" % (i, target))
+    res1.append(target)
+    # 将每天的操作结果添加到res列表中
+    res.append(res1)
+
+
 
     # 如果黄金不能交易
     if (m[i][2] == 1):
@@ -139,18 +144,18 @@ for i in range(1, height - 1):
         k = k1
         target = target1
 
+
 # 将结果转换为NumPy数组
 res = np.array(res)
 print(res.shape[0])
-
-# 打印最后一天的资产
-print("第%d天的资产为：%f" % (height - 1, target))
+print(res)
 
 # 将结果写入CSV文件
-f = open('每天的实际操作.csv', 'w', encoding='utf-8', newline="")
+f = open('资产+每天的实际操作-2000.csv', 'w', encoding='utf-8', newline="")
 csv_writer = csv.writer(f)
-csv_writer.writerow(["日期(月/日/年)", "操作"])
-csv_writer.writerow(["9/11/16", 0])
+csv_writer.writerow(["资金", "日期(月/日/年)", "操作"])
+#csv_writer.writerow(["日期(月/日/年)", "操作"])
+#csv_writer.writerow(["9/11/16", 0])
 for i in range(0, 1824):
     csv_writer.writerow(res[i])
 f.close()
