@@ -80,7 +80,7 @@ print("actual:",ji[input_size+1])
 losses = []
 predictions = []
 actuals = []
-for i in range(start_input, input_size + 1, 100):
+for i in range(start_input, input_size + 1, 20):
     print("进行到input_size=", i)
     # gru=GRUModel(i, hidden_size, output_size, layers_size).to(device)
     gru = GRUModel(30, hidden_size, output_size, layers_size).to(device)
@@ -111,15 +111,33 @@ for i in range(start_input, input_size + 1, 100):
     predictions.append(pred_y_train.item())
     actuals.append(ji[i + 1])
 
-plt.figure(figsize=(10, 6))
-plt.plot(losses, label='loss')
-plt.plot(predictions, label='prediction')
-plt.plot(actuals, label='real')
+plt.figure(figsize=(20, 6))  # 调整图形大小
+plt.plot(losses, label='Loss', linestyle='-', color='red')
+plt.plot(predictions, label='Prediction', linestyle='--', color='blue')
+plt.plot(actuals, label='Real', linestyle='-.', color='green')
 plt.legend()
+plt.title('Comparison of Loss, Prediction, and Real Values')
+plt.xlabel('Data Points')
+plt.ylabel('Values')
+plt.grid(True)
+plt.xticks(rotation=45)
+plt.xticks(range(0, len(losses),5))  # 调整 X 轴刻度间隔
 plt.show()
+
 
 
 print(np.array(predictions).shape[0])
 print(np.array(actuals).shape[0])
 print(np.array(losses).shape[0])
 print(input_size-29)
+
+# 保存预测结果
+with open('预测结果.csv', 'w', newline='') as csvfile:
+    writer = csv.writer(csvfile)
+    writer.writerow(['预测值', '实际值', '损失'])
+    for i in range(np.array(predictions).shape[0]):
+        writer.writerow([predictions[i], actuals[i], losses[i]])
+
+
+
+
