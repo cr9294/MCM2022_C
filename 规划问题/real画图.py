@@ -74,29 +74,3 @@ plt.legend()
 # Show the combined plot
 plt.show()
 
-import matplotlib.pyplot as plt
-
-# Your existing code
-
-# Count occurrences of 0, 1, and 2 for each year
-occurrences_by_year = operations_df.groupby(['Year', '操作']).size().unstack(fill_value=0)
-
-# Plot occurrences for each operation type
-fig, axs = plt.subplots(3, 1, figsize=(10, 15), sharex=True)
-
-for operation_type, ax in zip([0, 1, 2], axs):
-    occurrences_by_year[operation_type].plot(kind='bar', stacked=True, ax=ax, color='C0', label=f'Operation {operation_type}')
-    ax.set_ylabel('Occurrences')
-    ax.legend()
-
-# Add a line plot for total occurrences
-total_occurrences_by_year = occurrences_by_year.sum(axis=1)
-ax.plot(total_occurrences_by_year.index, total_occurrences_by_year.values, color='black', marker='o', label='Total', linestyle='dashed')
-
-# Show legend
-ax.legend()
-
-# Show the combined plot
-plt.title('Occurrences by Year for Each Operation Type')
-plt.xlabel('Year')
-plt.show()
