@@ -8,8 +8,8 @@ import torch
 import torch.nn as nn
 import xlwt
 
-BCHAIN_MKPRU=pd.read_csv("../BCHAIN-MKPRU.csv", dtype={"Date":np.str, "Value":np.float64})
-LBMA_GOLD=pd.read_csv("../LBMA-GOLD.csv", dtype={"Date":np.str, "Value":np.float64})
+BCHAIN_MKPRU=pd.read_csv("../BCHAIN-MKPRU.csv", dtype={"Date":str, "Value":np.float64})
+LBMA_GOLD=pd.read_csv("../LBMA-GOLD.csv", dtype={"Date":str, "Value":np.float64})
 Data=pd.read_csv("../C题处理后的中间文件2.csv")
 df=pd.read_csv("../C题处理后的中间文件2.csv")
 

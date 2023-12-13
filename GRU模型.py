@@ -8,8 +8,8 @@ import torch
 import torch.nn as nn
 import csv
 
-BCHAIN_MKPRU=pd.read_csv("BCHAIN-MKPRU.csv",dtype={"Date":np.str,"Value":np.float64})
-LBMA_GOLD=pd.read_csv("LBMA-GOLD.csv",dtype={"Date":np.str,"Value":np.float64})
+BCHAIN_MKPRU=pd.read_csv("BCHAIN-MKPRU.csv",dtype={"Date":str,"Value":np.float64})
+LBMA_GOLD=pd.read_csv("LBMA-GOLD.csv",dtype={"Date":str,"Value":np.float64})
 Data=pd.read_csv("C题处理后的中间文件2.csv")
 
 def to_timestamp(date):
@@ -80,7 +80,7 @@ print("actual:",ji[input_size+1])
 losses = []
 predictions = []
 actuals = []
-for i in range(start_input, input_size + 1, 20):
+for i in range(start_input, input_size + 1, 1):#修改input_size，可以改变预测的天数
     print("进行到input_size=", i)
     # gru=GRUModel(i, hidden_size, output_size, layers_size).to(device)
     gru = GRUModel(30, hidden_size, output_size, layers_size).to(device)
@@ -121,7 +121,7 @@ plt.xlabel('Data Points')
 plt.ylabel('Values')
 plt.grid(True)
 plt.xticks(rotation=45)
-plt.xticks(range(0, len(losses),5))  # 调整 X 轴刻度间隔
+plt.xticks(range(0, len(losses),100))  # 调整 X 轴刻度间隔
 plt.show()
 
 

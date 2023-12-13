@@ -56,6 +56,11 @@ for operation_type in [0, 1, 2]:
 plt.show()
 
 # Count occurrences of 0, 1, and 2 for each year
+"""
+0: Cash
+1: Bitcoin
+2: Gold
+"""
 occurrences_by_year = operations_df.groupby(['Year', '操作']).size().unstack(fill_value=0)
 
 # Plot occurrences as a bar plot
@@ -74,3 +79,54 @@ plt.legend()
 # Show the combined plot
 plt.show()
 
+
+
+
+# Iterate over different years to create separate plots
+for year in operations_df['Year'].unique():
+    year_data = operations_df[operations_df['Year'] == year]
+
+    # Plot the daily operations trend
+    plt.figure(figsize=(12, 6))
+    plt.plot(year_data['日期(月/日/年)'], year_data['操作'], marker='o', linestyle='-', color='#4287f5', label=f'Actual Operations - {year}')
+    plt.title(f'Daily Operations ({year})', fontsize=16)
+    plt.xlabel('Date', fontsize=14)
+    plt.ylabel('Operation (0: Cash, 1: Bitcoin, 2: Gold)', fontsize=14)
+    plt.xticks(rotation=45, fontsize=12)
+    plt.yticks([0, 1, 2], ['Cash', 'Bitcoin', 'Gold'], fontsize=12)
+    plt.legend(fontsize=12)
+    plt.grid(True)
+    plt.tight_layout()
+
+    # Add statistical information to the plot
+    for operation_type in [0, 1, 2]:
+        total_days = year_data[year_data['操作'] == operation_type].shape[0]
+        plt.text(year_data['日期(月/日/年)'].iloc[-1], operation_type, f'Total Days: {total_days}', fontsize=10,
+                va='center', ha='left', color='black', bbox=dict(facecolor='white', alpha=0.7))
+
+    # Show the plot
+    plt.show()
+
+    # Print occurrences by year
+    occurrences_by_year = year_data.groupby(['Year', '操作']).size().unstack(fill_value=0)
+    print(f"\nOccurrences by Year ({year}):")
+    print(occurrences_by_year)
+
+    # Plot occurrences as a bar plot
+    """
+    occurrences_by_year.plot(kind='bar', stacked=True, figsize=(10, 6))
+    plt.title(f'Occurrences by Year ({year})')
+    plt.xlabel('Year')
+    plt.ylabel('Occurrences')
+    
+    
+    # Add a line plot for total occurrences
+    total_occurrences_by_year = occurrences_by_year.sum(axis=1)
+    plt.plot(total_occurrences_by_year.index, total_occurrences_by_year.values, color='black', marker='o', label='Total', linestyle='dashed')
+
+    # Show legend
+    plt.legend()
+
+    # Show the combined plot
+    plt.show()
+    """
