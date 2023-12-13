@@ -41,7 +41,7 @@ for i in range(1, height - 1):
     print("第%d天的资产为：%f" % (i, target))
     res1.append(target)
     # 将每天的操作结果添加到res列表中
-    res.append(res1)
+    #res.append(res1)
 
 
 
@@ -139,13 +139,15 @@ for i in range(1, height - 1):
 
         n = n + 1
         res1.append(m[i][0])
+        #print(res1)
         res1.append(k1)
+        print(res1)
         res.append(res1)
         k = k1
         target = target1
 
-
 # 将结果转换为NumPy数组
+
 res = np.array(res)
 print(res.shape[0])
 print(res)

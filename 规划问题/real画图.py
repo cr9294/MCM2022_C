@@ -3,7 +3,7 @@ import seaborn as sns
 import pandas as pd
 
 # Read the data for daily operations
-operations_df = pd.read_csv('资产+每天的实际操作-1000.csv')
+operations_df = pd.read_csv('资产+每天的实际操作-2000.csv')
 
 # Convert the date column to datetime type
 operations_df['日期(月/日/年)'] = pd.to_datetime(operations_df['日期(月/日/年)'], format='%m/%d/%y')
