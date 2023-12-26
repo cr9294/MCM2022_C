@@ -11,8 +11,8 @@ import xlwt
 # 从CSV文件中读取数据
 BCHAIN_MKPRU = pd.read_csv("../BCHAIN-MKPRU.csv", dtype={"Date": str, "Value": np.float64})
 LBMA_GOLD = pd.read_csv("../LBMA-GOLD.csv", dtype={"Date": str, "Value": np.float64})
-Data = pd.read_csv("../C题处理后的中间文件2.csv")
-df = pd.read_csv("../C题处理后的中间文件2.csv")
+Data = pd.read_csv("../合并文件.csv")
+df = pd.read_csv("../合并文件.csv")
 
 # 将日期转换为时间戳的函数
 def to_timestamp(date):
@@ -55,20 +55,46 @@ for day_fit in range(2, days_fit + 1):
     g_pred_linear.append(gold_reg.predict(np.array([day_fit]).reshape(-1, 1)))
 
 ji1 = np.array(b_pred_linear).reshape(-1, 1)
+ji1 = np.array(ji1)
 ji2 = np.array(Data.iloc[2:days_fit + 1, 1])
-ji3 = [round(ji1[i][0][0][0], 2) for i in range(2, 1826)]
+ji2 = np.array(ji2)
+print(ji2)
 
-book = xlwt.Workbook(encoding="utf-8", style_compression=0)
-sheet = book.add_sheet("回归预测比特币", cell_overwrite_ok=True)
-col = ("日期", "预测值", "真实值", "误差")
+import csv
 
-for i in range(0, 4):
-    sheet.write(0, i, col[i])
+# Assuming df, ji1, and ji2 are defined earlier in your code
 
-for i in range(0, 1824):
-    sheet.write(i + 3, 0, Data.values[i + 2][0])
-    sheet.write(i + 3, 1, ji3[i])
-    sheet.write(i + 3, 2, ji2[i])
-    sheet.write(i + 3, 3, abs(ji3[i] - ji2[i]))
+with open("回归预测比特币.csv", mode="w", newline="", encoding="utf-8") as csvfile:
+    csv_writer = csv.writer(csvfile)
 
-book.save("回归预测比特币.xls")
+    col = ["日期", "标签", "预测值", "真实值", "误差"]
+    csv_writer.writerow(col)
+    # Lists to store predicted values for plotting
+    predicted_values = []
+    real_values = []
+
+    for i in range(0, 1824):
+        print("第%d条" % (i + 1))
+        if df.values[i + 2][2] == 1 or df.values[i + 2][2] == 0:
+            row_data = [
+                df.values[i + 2][0],
+                df.values[i + 2][2],
+                ji2[i],
+                ji1[i + 2][0][0][0],
+                abs(ji1[i + 2][0][0][0] - ji2[i])
+            ]
+            csv_writer.writerow(row_data)
+
+            # Append values for plotting
+            predicted_values.append(ji1[i + 2][0][0][0])
+            real_values.append(ji2[i])
+
+# Plotting predicted vs real values
+plt.plot(real_values, label='Real Values', marker='o', color='green', linestyle='-')
+plt.plot(predicted_values, label='Predicted Values', marker='x', color='red', linestyle='--')
+
+plt.xlabel('Data Points')
+plt.ylabel('Values')
+plt.title('Predicted vs Real Values(Bitcoin)')
+plt.legend()
+plt.show()

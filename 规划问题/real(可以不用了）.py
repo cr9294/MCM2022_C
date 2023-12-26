@@ -4,7 +4,7 @@ import csv
 import numpy as np
 
 # 读取CSV文件到DataFrame
-df = pd.read_csv("../C题处理后的中间文件2.csv")
+df = pd.read_csv("../合并文件.csv")
 
 # 获取DataFrame的行数和列数
 height, weight = df.shape

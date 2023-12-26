@@ -5,7 +5,7 @@ from statsmodels.tsa.arima.model import ARIMA
 import xlwt
 
 # Load your data
-Data = pd.read_csv("../C题处理后的中间文件2.csv")
+Data = pd.read_csv("../合并文件.csv")
 
 # Convert the date to a timestamp
 def to_timestamp(date):

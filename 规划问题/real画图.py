@@ -87,7 +87,7 @@ for year in operations_df['Year'].unique():
     year_data = operations_df[operations_df['Year'] == year]
 
     # Plot the daily operations trend
-    plt.figure(figsize=(12, 6))
+    plt.figure(figsize=(13, 6))
     plt.plot(year_data['日期(月/日/年)'], year_data['操作'], marker='o', linestyle='-', color='#4287f5', label=f'Actual Operations - {year}')
     plt.title(f'Daily Operations ({year})', fontsize=16)
     plt.xlabel('Date', fontsize=14)
@@ -130,3 +130,5 @@ for year in operations_df['Year'].unique():
     # Show the combined plot
     plt.show()
     """
+
+

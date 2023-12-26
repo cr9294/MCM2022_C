@@ -15,7 +15,7 @@ def calculate_asset_value_and_operations(df, height, m, huangjin):
     # Initialization
     k = 1  # k represents holding gold (2 for gold, 1 for bitcoin, 0 for cash)
     n = 0  # Gold statistics
-    rateG = 0.01  # Gold transaction fee rate
+    rateG = 0  # Gold transaction fee rate
     rateB = 0.02  # Bitcoin transaction fee rate
     target = 500  # Initial assets
     res = []  # Store daily operations
@@ -25,8 +25,39 @@ def calculate_asset_value_and_operations(df, height, m, huangjin):
         res1 = []
 
         # Print current day's assets
-        print("Day %d's assets: %f" % (i, target))
+        #print("Day %d's assets: %f" % (i, target))
         res1.append(target)
+        #print(m[i][0])
+
+        if m[i][0] == "1/1/17":
+            #rateB += 0.02
+            rateG += 0.02
+            print("rateB:", rateB)
+            print("rateG:", rateG)
+
+        if m[i][0] == "1/1/18":
+            #rateB += 0.02
+            rateG += 0.02
+            print("rateB:", rateB)
+            print("rateG:", rateG)
+
+        if m[i][0] == "1/1/19":
+            #rateB += 0.02
+            rateG += 0.02
+            print("rateB:", rateB)
+            print("rateG:", rateG)
+
+        if m[i][0] == "1/1/20":
+            #rateB += 0.02
+            rateG += 0.02
+            print("rateB:", rateB)
+            print("rateG:", rateG)
+
+        if m[i][0] == "1/1/21":
+            #rateB += 0.02
+            rateG += 0.02
+            print("rateB:", rateB)
+            print("rateG:", rateG)
 
         # If gold cannot be traded
         if m[i][2] == 1:
@@ -119,5 +150,5 @@ if __name__ == "__main__":
     print("Number of rows in the resulting array:", results.shape[0])
     print(results)
 
-    output_file = '资产+每天的实际操作-500-new.csv'
+    output_file = '比特币不变变黄金.csv'
     write_to_csv(results, output_file)

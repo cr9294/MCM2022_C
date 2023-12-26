@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Read the CSV file
-Data = pd.read_csv("C题处理后的中间文件2.csv")
+Data = pd.read_csv("合并文件.csv")
 
 # Extract the third column values
 column3_values = Data.iloc[:, 2]
